@@ -29,7 +29,7 @@ const products = [
 // ============================================
 
 /*
-🔹 Task 1: Filter Products by Availability
+Task 1: Filter Products by Availability
 
 Create a function `filterProducts` that accepts:
 - an array of products
@@ -44,9 +44,15 @@ Step-by-Step:
 3. Return the filtered result.
 */
 
+function filterProducts(arr, callFunction) {
+  return arr.filter(callFunction);
+}
+
+let filteredProducts = filterProducts(products, product => product.price >= 500);
+
 
 /*
-🔹 Task 2: Transform Product Names
+Task 2: Transform Product Names
 
 Use `map()` to create a new array of product names in UPPERCASE.
 
@@ -56,9 +62,16 @@ Step-by-Step:
 3. Store the result in a new variable.
 */
 
+// const upperCaseNames = products.map(function(product) {
+//  return {...product, name: product.name.toUpperCase() };
+//});
+
+//const altMutateName = products.map(product => ({ ...product, name: product.name.toUpperCase()}));
+
+const upperCaseNames = products.map(products => products.name.toUpperCase());
 
 /*
-🔹 Task 3: Generate Discounted Prices
+Task 3: Generate Discounted Prices
 
 Write a higher-order function `applyDiscount` that:
 - Accepts a discount percentage
@@ -70,9 +83,31 @@ Step-by-Step:
 3. Use this returned function inside a `map()` call to apply discounts to all products.
 */
 
+// function applyDiscount(discountPercent){
+//   return function(product) {
+//     const discountedPrice = product.price - (product.price * (discountPercent / 100));
+//     return { ...product, price: discountedPrice };
+//   };
+// }
+
+// const afterDiscount = products.map(applyDiscount(20));
+
+function applyDiscount(discountPercent) {
+  return function (product){
+    return product.price - (product.price * (discountPercent / 100 ));
+  };
+}
+
+const afterDiscount = products.map(product => {
+  const tempProduct = {...product};
+  const temp = applyDiscount(20);
+  tempProduct.price = temp(product);
+  return tempProduct;
+});
+
 
 /*
-🔹 Task 4: Calculate Total Inventory Value
+Task 4: Calculate Total Inventory Value
 
 Use `reduce()` to calculate the total value of products that are currently in stock.
 
@@ -82,6 +117,25 @@ Step-by-Step:
 3. Store the total in a new variable.
 */
 
+// const totalValue = products.reduce( (total, product) => {
+//   if (product.inStock) {
+//     return total + product.price;
+//   }
+//   return total;
+// }, 0);
+
+const totalValue = products.reduce( function (total, product) {
+  if (product.inStock === true) {
+    total += product.price;
+  }
+  return total;
+}, 0);
+
+// const inStockItems = filterProducts(products, product => product.inStock === true);
+
+// const totalValue = inStockItems.reduce((accumulator ,item) => {
+//   return accumulator += item.price;
+// }, 0);
 
 // ============================================
 // 🧪 Console Test Your Work
@@ -91,3 +145,13 @@ Step-by-Step:
 // console.log("Uppercased names:", ...);
 // console.log("Discounted products:", ...);
 // console.log("Total value in stock:", ...);
+
+console.log("Filtered products: ", filteredProducts);
+console.log("Uppercased names: ", upperCaseNames);
+// console.log("Uppercased names: ", altMutateName);
+// console.log("Uppercased name: ", alt2MutateName);
+console.log("Discounted products: ", afterDiscount);
+console.log("Total Inventory Value: ", totalValue);
+
+
+// Eric Spaeth, Taylor M., Cody Robinson, Aidan W
